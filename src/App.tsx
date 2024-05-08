@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import "./App.css";
+import {Entity} from "./components/Entity.tsx";
 
 type PlayerState = {
     health: number,
@@ -110,73 +111,66 @@ function App() {
 
     return (
         <div className="flex flex-col w-full h-full items-center gap-4">
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center relative">
                 <h1 className={'text-2xl font-bold p-4 w-screen text-center border-b-2'}>MicroRPG!</h1>
-                <p className={'p-4'}>Welcome to MicroRPG</p>
-            </div>
-            <h2>ROUND {round}</h2>
-            <div className={"flex flex-col  items-center gap-10"}>
 
-                <h3 className={'text-xl font-bold'}>
-                    Stats
-                </h3>
+                <button className={"absolute right-0 bottom-0 top-0 border-2 px-2 py-1 m-1 pointer"}
+                        onClick={action.restart}>
+                    Restart
+                </button>
+            </div>
+            <h2 className={'text-xl'}>LEVEL {round}</h2>
+            <div className={"flex flex-col  items-center "}>
+
                 <div className={"flex flex-row gap-10"}>
-                    <div className={'flex flex-col'}>
-                        <p>Player:</p>
-                        <p>Health is {playerState.health}</p>
-                        <p>Gold is {playerState.gold}</p>
-                        <p>Strength is {playerState.strength}</p>
-
-                    </div>
-                    <div className={'flex flex-col'}>
-                        <p>Enemy:</p>
-                        <p>Health is {enemyState.health}</p>
-                        <p>Strength is {enemyState.strength}</p>
-                    </div>
+                    <Entity name={'Player'} strength={playerState.strength} health={playerState.health}/>
+                    <Entity name={'Enemy'} strength={enemyState.strength} health={enemyState.health}/>
                 </div>
+                <p>💰 {playerState.gold}</p>
 
-                <div className={'flex flex-col'}>
-                    <p>Training: 10 Gold ={">"} {dojoStrength} Strength</p>
-                    <p>Rest: 1 Gold ={">"} {restHealth} Health</p>
-                    <br/>
-                    <p>Upgrades:</p>
-                    <p>Bed: 35 Gold ={">"} {restHealth + Math.pow(round, 2)} Health on Rest</p>
-                    <p>Dojo: 35 Gold ={">"} {dojoStrength + Math.pow(round, 2)} Strength on Training</p>
-                </div>
             </div>
 
-            <div className={'flex flex-col gap-4 items-center'}>
-                <h3 className={"text-xl font-bold"}>
-                    Action
-                </h3>
-                <div className={'flex flex-col gap-1 items-center'}>
-                    <div>
-                        <button className={"border-2 p-2 m-2 pointer"} onClick={action.fight} disabled={!gameRunning}>
-                            Fight
-                        </button>
-                        <button className={"border-2 p-2 m-2 pointer"} onClick={action.rest} disabled={!gameRunning}>
-                            Rest
-                        </button>
-                        <button className={"border-2 p-2 m-2 pointer"} onClick={action.train} disabled={!gameRunning}>
-                            Training
-                        </button>
+            <div className={'flex flex-col gap-2 items-center'}>
+                <div className={'flex flex-row gap-1 items-center justify-center flex-wrap w-[300px]'}>
+                    <button className={"border-2 px-2 py-1 m-1 pointer"} onClick={action.fight}
+                            disabled={!gameRunning}>
+                        Fight
+                    </button>
+                    <button className={"border-2 px-2 py-1 m-1 pointer"} onClick={action.rest}
+                            disabled={!gameRunning}>
+                        Rest
+                    </button>
+                    <button className={"border-2 px-2 py-1 m-1 pointer"} onClick={action.train}
+                            disabled={!gameRunning}>
+                        Training
+                    </button>
+                    <button className={"border-2 px-2 py-1 m-1 pointer"} onClick={action.upgradeDojo}
+                            disabled={!gameRunning}>
+                        Upgrade Dojo
+                    </button>
+                    <button className={"border-2 px-2 py-1 m-1 pointer"} onClick={action.upgradeBed}
+                            disabled={!gameRunning}>
+                        Upgrade Bed
+                    </button>
+                </div>
+
+                <div className={'flex flex-row gap-4 mt-4'}>
+                    <div className={"border-2 p-1"}>
+                        <p>Actions:</p>
+                        <p>Dojo: 10💰 = {dojoStrength} ⚔️</p>
+                        <p>Bed: 1💰 = {restHealth} ♥️</p>
                     </div>
-                    <div>
-                        <button className={"border-2 p-2 m-2 pointer"} onClick={action.upgradeDojo}
-                                disabled={!gameRunning}>
-                            Upgrade Dojo
-                        </button>
-                        <button className={"border-2 p-2 m-2 pointer"} onClick={action.upgradeBed}
-                                disabled={!gameRunning}>
-                            Upgrade Bed
-                        </button>
-                    </div>
-                    <div>
-                        <button className={"border-2 p-2 m-2 pointer"} onClick={action.restart}>
-                            Restart
-                        </button>
+                    <div className={"border-2 p-1"}>
+                        <p>Upgrades:</p>
+                        <p>Dojo: 35💰 = {dojoStrength + Math.pow(round, 2)} ⚔️ on Training</p>
+                        <p>Bed: 35💰 = {restHealth + Math.pow(round, 2)} ♥️ on Rest</p>
                     </div>
                 </div>
+
+                <p className={'p-4 text-gray-600 italic text-center'}>
+                    Your enemy gets stronger every round, however, your upgrades also bring more perks every round. Time
+                    your actions wisely to survive as long as possible.
+                </p>
             </div>
         </div>
     )
